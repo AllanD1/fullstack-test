@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, List} from 'native-base';
+import {
+  Dimensions,
+  View,
+  ScrollView,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet
+} from "react-native";
+import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, List,ListItem}  from 'native-base';
 import PostItem from './PostItem'
 import axios from "axios";
 
 const styles = StyleSheet.create({
-  bigBlue: {
-    color: "blue",
-    fontWeight: "bold",
-    fontSize: 30
-  },
+ 
   header: {
     backgroundColor: "#EDEDED",
     color: "#333333"
@@ -54,74 +57,158 @@ const styles = StyleSheet.create({
     textAlign:'center'
   }
 });
-
+const { width, height } = Dimensions.get("window");
 export default class Home extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { serverposts: [] };
-    }
-    componentDidMount() {
-        axios
-          .get(
-            "https://stormy-shelf-93141.herokuapp.com/articles?_page=1&_limit=10"
-          )
-          .then(response => {
-              console.log(Response)
-            this.setState({ serverposts: response.data });
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
-    }
-
-    tabRow() {
-        return this.state.serverposts.map(function (object, i) {
-            return <PostItem obj={object} ind={i} />;
-        });
-    }
-  render() {
-    return (
-      <Container>
-        <Header style={styles.header}>
-          <Body>
-            <Title style={styles.header}>Posts</Title>
-          </Body>
-          <Right>
-            <Button transparent>
-              <Icon
-                style={styles.icon}
-                type="MaterialCommunityIcons"
-                name="plus"
-              />
-            </Button>
-          </Right>
-        </Header>
-        <Content>
-          <List>
-            {this.tabRow()}
-          </List>
-        </Content>
-        <Footer style={styles.footer}>
-          <FooterTab style={styles.footer}>
-            <Button transparent>
-              <Icon
-                style={styles.iconFooter}
-                type="FontAwesome"
-                name="newspaper-o"
-              />
-            </Button>
-          </FooterTab>
-          <FooterTab style={styles.footer}>
-            <Button transparent>
-              <Icon
-                style={styles.iconFooterInative}
-                type="MaterialCommunityIcons"
-                name="comment-text-multiple"
-              />
-            </Button>
-          </FooterTab>
-        </Footer>
-      </Container>
-    );
+  
+  state = {
+    data: [],
+    page: 1,
+    loading: true,
+    loadingMore: false,
+    filtering: false,
+    refreshing: false,
+    error: null
+  };
+  
+  componentDidMount() {
+    this._fetchAllBeers();
   }
-}
+  
+  _fetchAllBeers = () => {
+    const { page } = this.state;
+    const URL = `https://stormy-shelf-93141.herokuapp.com/articles?_page=${page}&_limit=10`;
+    
+    axios.get(URL)
+    .then(response => {
+      this.setState((prevState, nextProps) => ({
+        data:
+        page === 1
+        ? Array.from(response.data)
+        : [...this.state.data, ...response.data],
+        loading: false,
+        loadingMore: false,
+        refreshing: false
+      }));
+    })
+    .catch(error => {
+      this.setState({ error, loading: false });
+    });
+  };
+  
+  _handleRefresh = () => {
+    this.setState(
+      {
+        page: 1,
+        refreshing: true
+      },
+      () => {
+        this._fetchAllBeers();
+      }
+      );
+    };
+    
+    _handleLoadMore = () => {
+      this.setState(
+        (prevState, nextProps) => ({
+          page: prevState.page + 1,
+          loadingMore: true
+        }),
+        () => {
+          this._fetchAllBeers();
+        }
+        );
+      };
+      
+      _renderFooter = () => {
+        if (!this.state.loadingMore) return null;
+        
+        return (
+          <View
+          style={{
+            position: 'relative',
+            width: width,
+            height: height,
+            paddingVertical: 20,
+            borderTopWidth: 1,
+            marginTop: 10,
+            marginBottom: 10,
+            borderColor: "#eeee33"
+          }}
+          >
+          <ActivityIndicator animating size="large" />
+          </View>
+          );
+        };
+        
+      _tabRow = ()=>{
+          return !this.state.loading ? (
+            <FlatList
+             
+              data={this.state.data}
+              renderItem={({ item, index }) => (
+                <PostItem obj={item} ind={index} />
+              )}
+              keyExtractor={item => item.id.toString()}
+           
+              ListFooterComponent={this._renderFooter}
+              onRefresh={this._handleRefresh}
+              refreshing={this.state.refreshing}
+              onEndReached={this._handleLoadMore}
+              onEndReachedThreshold={0.5}
+              initialNumToRender={10}
+            />
+          ) : (
+            <View>
+              <Text style={{ alignSelf: "center" }}>Get Posts</Text>
+              <ActivityIndicator />
+            </View>
+          );
+              }
+              render() {
+                return (
+                  <Container>
+                    <Header style={styles.header}>
+                      <Body>
+                      <Title style={styles.header}>Posts</Title>
+                      </Body>
+                      <Right>
+                        <Button transparent>
+                        <Icon
+                        style={styles.icon}
+                        type="MaterialCommunityIcons"
+                        name="plus"
+                        />
+                        </Button>
+                      </Right>
+                    </Header>
+                    <Content>
+                     
+                      {this._tabRow()}
+                  
+                  </Content>
+                  <Footer style={styles.footer}>
+                    <FooterTab style={styles.footer}>
+                      <Button transparent>
+                        <Icon
+                        style={styles.iconFooter}
+                        type="FontAwesome"
+                        name="newspaper-o"
+                        />
+                      </Button>
+                      </FooterTab>
+                      <FooterTab style={styles.footer}>
+                        <Button transparent>
+                            <Icon
+                            style={styles.iconFooterInative}
+                            type="MaterialCommunityIcons"
+                            name="comment-text-multiple"
+                            />
+                        </Button>
+                      </FooterTab>
+                  </Footer>
+                </Container>
+                );
+              }
+            }
+            
+            

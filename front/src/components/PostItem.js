@@ -4,58 +4,109 @@ import {
     ListItem, Thumbnail, Text, Left, Body, Right, Button
 } from "native-base";
 import { Actions } from "react-native-router-flux";
+import StarRating from "react-native-star-rating";
+const styles = StyleSheet.create({
+  itemRight: {
+    backgroundColor:"#EEEEEE",
+    width: '100%',
+    marginLeft: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    marginRight: 0
+    
+  },
+  itemLeft: {
+      width: '100%',
+      marginLeft: 0,
+      paddingLeft: 0,
+      paddingRight: 0,
+      marginRight: 0
+  },
+  body: {
+    
+    marginLeft: 0,
+    paddingLeft: 15,
+    paddingRight: 15,
+    marginRight: 0
+  },
+  thumb:{
+    width:180,
+    height:180
+  },
+  
+});
 
 export default class PostItem extends Component {
     render() {
         let Post = (
-          <ListItem thumbnail>
-            <Left>
-              <Thumbnail
-                square
-                source={{
-                  uri: this.props.obj.imageUrl
-                }}
-              />
-            </Left>
-            <Body>
-              <Text>{this.props.obj.title}</Text>
-              <Text note numberOfLines={1}>
-                Its time to build a difference . .
-              </Text>
+          <ListItem
+            onPress={() => Actions.post(this.props.obj)}
+            thumbnail
+            style={styles.itemLeft}
+          >
+            <Thumbnail
+              style={styles.thumb}
+              square
+              source={{
+                uri: this.props.obj.imageUrl
+              }}
+            />
+            <Body style={styles.body}>
+              <Left>
+                <Text>{this.props.obj.author}</Text>
+                <Text numberOfLines={2}>{this.props.obj.title}</Text>
+                <Text note numberOfLines={3}>
+                  {this.props.obj.article}
+                </Text>
+                <StarRating
+                  disabled={true}
+                  maxStars={5}
+                  rating={Math.floor(Math.random() * 5)}
+                  starSize={16}
+                  halfStarColor={"#f1a10d"}
+                  fullStarColor={"#f1a10d"}
+                  emptyStarColor={"#f1a10d"}
+                />
+              </Left>
             </Body>
-            <Right>
-              <Button
-                onPress={() => Actions.post({ nome: "Allan" })}
-                transparent
-              >
-                <Text>View</Text>
-              </Button>
-            </Right>
           </ListItem>
         );
 
         if (this.props.ind % 2){
             Post = (
-              <ListItem thumbnail>
-                    <Left>
-                      <Button transparent>
-                        <Text>View</Text>
-                      </Button>
-                    </Left>
-                <Body>
-                  <Text>Sankhadeep</Text>
-                  <Text note numberOfLines={1}>
-                    Its time to build a difference . .
-                  </Text>
+              <ListItem
+                style={styles.itemRight}
+                onPress={() => Actions.post(this.props.obj)}
+                thumbnail
+              >
+                <Body style={styles.body}>
+                  <Right>
+                    <Text>{this.props.obj.author}</Text>
+                    <Text numberOfLines={2}>
+                      {this.props.obj.title}
+                    </Text>
+                    <Text note numberOfLines={3}>
+                      {this.props.obj.article}
+                    </Text>
+                    <StarRating
+                      disabled={true}
+                      maxStars={5}
+                      rating={Math.floor(Math.random() * 5)}
+                      starSize={16}
+                      halfStarColor={"#f1a10d"}
+                      fullStarColor={"#f1a10d"}
+                      emptyStarColor={"#f1a10d"}
+                    />
+                  </Right>
                 </Body>
-                <Right>
-                  <Thumbnail
-                    square
-                    source={{
-                         uri: this.props.Img
-                    }}
-                  />
-                </Right>
+
+                <Thumbnail
+                  style={styles.thumb}
+                  square
+                  source={{
+                    uri: this.props.obj.imageUrl
+                  }}
+                />
               </ListItem>
             );
         }

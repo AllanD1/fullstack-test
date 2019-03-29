@@ -5,6 +5,7 @@ import {
 } from "native-base";
 
 
+
 export default class Post extends Component {
     
     render(){
