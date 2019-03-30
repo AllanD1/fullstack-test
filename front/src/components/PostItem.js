@@ -33,6 +33,14 @@ const styles = StyleSheet.create({
     width:180,
     height:180
   },
+  h1:{
+    color: "#f1a10d",
+    fontWeight: "700"
+  },
+  h3:{
+    fontWeight: "700",
+    fontSize:10
+  }
   
 });
 
@@ -53,10 +61,10 @@ export default class PostItem extends Component {
             />
             <Body style={styles.body}>
               <Left>
-                <Text>{this.props.obj.author}</Text>
-                <Text numberOfLines={2}>{this.props.obj.title}</Text>
+                <Text style={styles.h3} >{this.props.obj.author}</Text>
+                <Text style={styles.h1} numberOfLines={2}>{this.props.obj.title}</Text>
                 <Text note numberOfLines={3}>
-                  {this.props.obj.article}
+                  {this.props.obj.article.replace("<p>", "")}
                 </Text>
                 <StarRating
                   disabled={true}
@@ -81,12 +89,12 @@ export default class PostItem extends Component {
               >
                 <Body style={styles.body}>
                   <Right>
-                    <Text>{this.props.obj.author}</Text>
-                    <Text numberOfLines={2}>
+                    <Text style={styles.h3} >{this.props.obj.author}</Text>
+                    <Text style={styles.h1} numberOfLines={2}>
                       {this.props.obj.title}
                     </Text>
                     <Text note numberOfLines={3}>
-                      {this.props.obj.article}
+                      {this.props.obj.article.replace("<p>", "")}
                     </Text>
                     <StarRating
                       disabled={true}

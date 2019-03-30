@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Dimensions,
   View,
-  ScrollView,
   FlatList,
   ActivityIndicator,
   StyleSheet
@@ -154,7 +153,7 @@ export default class Home extends Component {
               onRefresh={this._handleRefresh}
               refreshing={this.state.refreshing}
               onEndReached={this._handleLoadMore}
-              onEndReachedThreshold={0.5}
+              onEndReachedThreshold={0.2}
               initialNumToRender={10}
             />
           ) : (
