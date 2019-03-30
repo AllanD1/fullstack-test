@@ -26,8 +26,12 @@ import {
 
 import { Actions } from "react-native-router-flux";
 const styles = StyleSheet.create({
-    header: {
+    body: {
         backgroundColor: "#EDEDED",
+        color: "#333333"
+    },
+    header: {
+        backgroundColor: "#FFFFFF",
         color: "#333333"
     },
     icon: {
@@ -59,7 +63,7 @@ export default class Contato extends Component {
     render() {
         
         return (
-          <Container>
+            <Container style={styles.body}>
             <Header style={styles.header}>
               <Body>
                 <Title style={styles.header}>Contact</Title>
