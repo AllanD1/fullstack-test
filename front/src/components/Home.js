@@ -9,7 +9,7 @@ import {
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Right, Body, Icon, Text, List,ListItem}  from 'native-base';
 import PostItem from './PostItem'
 import axios from "axios";
-
+import { Actions } from "react-native-router-flux";
 const styles = StyleSheet.create({
  
   header: {
@@ -168,44 +168,49 @@ export default class Home extends Component {
                   <Container>
                     <Header style={styles.header}>
                       <Body>
-                      <Title style={styles.header}>Posts</Title>
+                        <Title style={styles.header}>
+                          Posts
+                        </Title>
                       </Body>
                       <Right>
                         <Button transparent>
-                        <Icon
-                        style={styles.icon}
-                        type="MaterialCommunityIcons"
-                        name="plus"
-                        />
+                          <Icon
+                            style={styles.icon}
+                            type="MaterialCommunityIcons"
+                            name="plus"
+                          />
                         </Button>
                       </Right>
                     </Header>
-                    <Content>
-                     
-                      {this._tabRow()}
-                  
-                  </Content>
-                  <Footer style={styles.footer}>
-                    <FooterTab style={styles.footer}>
-                      <Button transparent>
-                        <Icon
-                        style={styles.iconFooter}
-                        type="FontAwesome"
-                        name="newspaper-o"
-                        />
-                      </Button>
+                    <Content>{this._tabRow()}</Content>
+                    <Footer style={styles.footer}>
+                      <FooterTab style={styles.footer}>
+                        <Button onPress={() =>
+                          Actions.home()
+                        } transparent>
+                          <Icon
+                            style={styles.iconFooter}
+                            type="FontAwesome"
+                            name="newspaper-o"
+                          />
+                        </Button>
                       </FooterTab>
                       <FooterTab style={styles.footer}>
-                        <Button transparent>
-                            <Icon
+                        <Button
+                          onPress={() =>
+                            Actions.contato()
+                          }
+                          transparent
+                        >
+                          <Icon
                             style={styles.iconFooterInative}
                             type="MaterialCommunityIcons"
                             name="comment-text-multiple"
-                            />
+                          />
                         </Button>
                       </FooterTab>
-                  </Footer>
-                </Container>
+                    </Footer>
+                  </Container>
                 );
               }
             }

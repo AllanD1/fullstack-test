@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Body, Icon, Text, List, ListItem } from 'native-base';
+import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Body, Icon, Text, List, ListItem, Right } from 'native-base';
 import { Actions } from "react-native-router-flux";
 import SlidePost from './SlidePost'
 import StarRating from "react-native-star-rating";
@@ -52,10 +52,17 @@ const styles = StyleSheet.create({
     },
     h1: {
         color: "#f1a10d",
-        fontWeight: "700"
+        fontWeight: "700",
+        fontSize: 24
     },
     h3: {
-        fontSize: 10
+        fontSize: 12,
+        marginTop:15,
+        marginBottom:15
+    },
+    h3b: {
+        fontSize: 12,
+        fontWeight: "700"
     }
     
 
@@ -70,19 +77,27 @@ export default class Post extends Component {
             <Header style={styles.header}>
               <Left>
                 <Button onPress={() => Actions.pop()} transparent>
-                  <Icon style={styles.header} name="arrow-back" />
+                  <Icon
+                    style={styles.header}
+                    type="FontAwesome5"
+                    name="chevron-left"
+                  />
                 </Button>
               </Left>
               <Body>
                 <Title style={styles.header}>Post</Title>
               </Body>
+              <Right />
             </Header>
 
             <Content>
               <SlidePost />
               <View style={{ padding: 15 }}>
-                <Text>{this.props.title}</Text>
-                <Text>Posted By: {this.props.author}</Text>
+                <Text style={styles.h1}>{this.props.title}</Text>
+                <Text style={styles.h3}>
+                  Posted By:
+                  <Text style={styles.h3b}>{this.props.author}</Text>
+                </Text>
                 <View style={{ width: 140 }}>
                   <StarRating
                     disabled={true}
@@ -94,13 +109,13 @@ export default class Post extends Component {
                     emptyStarColor={"#f1a10d"}
                   />
                 </View>
-                        <HTML html={this.props.article} />
+                <HTML html={this.props.article} />
               </View>
             </Content>
 
             <Footer style={styles.footer}>
               <FooterTab style={styles.footer}>
-                <Button transparent>
+                <Button onPress={() => Actions.home()} transparent>
                   <Icon
                     style={styles.iconFooter}
                     type="FontAwesome"
@@ -109,7 +124,7 @@ export default class Post extends Component {
                 </Button>
               </FooterTab>
               <FooterTab style={styles.footer}>
-                <Button transparent>
+                <Button onPress={() => Actions.contato()} transparent>
                   <Icon
                     style={styles.iconFooterInative}
                     type="MaterialCommunityIcons"
