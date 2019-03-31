@@ -75,7 +75,7 @@ export default class Home extends Component {
   
   _fetchAllBeers = () => {
     const { page } = this.state;
-    const URL = `https://stormy-shelf-93141.herokuapp.com/articles?_page=${page}&_limit=10`;
+    const URL = `http://192.168.0.179:3000/api/posts/page/${page}`;
     
     axios.get(URL)
     .then(response => {
@@ -147,7 +147,7 @@ export default class Home extends Component {
               renderItem={({ item, index }) => (
                 <PostItem obj={item} ind={index} />
               )}
-              keyExtractor={item => item.id.toString()}
+              // keyExtractor={item => index}
            
               ListFooterComponent={this._renderFooter}
               onRefresh={this._handleRefresh}

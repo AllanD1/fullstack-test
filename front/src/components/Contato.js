@@ -25,6 +25,8 @@ import {
 } from "native-base";
 
 import { Actions } from "react-native-router-flux";
+import Axios from "axios";
+
 const styles = StyleSheet.create({
     body: {
         backgroundColor: "#EDEDED",
@@ -59,7 +61,20 @@ export default class Contato extends Component {
             mensage: '',
         }
     }
-    
+    send(){
+      let data = this.state
+      //console.log(data)
+      Axios
+        .post("http://192.168.0.179:3000/api/email/send",
+          data
+        )
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
     render() {
         
         return (
@@ -107,7 +122,7 @@ export default class Contato extends Component {
                 />
                 
 
-                <Button block warning iconLeft>
+                <Button onPress={()=>{this.send()}} block warning iconLeft>
                     <Icon type="FontAwesome" name="paper-plane" />
                     <Text>Submit</Text>
                 </Button>

@@ -14,6 +14,8 @@ app.use(cors());
 
 const posts = require("./modules/posts/routes");
 app.use("/api/posts", posts);
+const email = require("./modules/email/routes");
+app.use("/api/email", email);
 
 const port = process.env.port || 3000;
 
